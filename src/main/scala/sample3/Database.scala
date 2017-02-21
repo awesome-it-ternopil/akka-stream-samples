@@ -1,6 +1,7 @@
 package sample3
 
 import scala.collection.mutable
+import scala.concurrent.Future
 
 /**
   * Created by viktor on 20.02.17.
@@ -16,16 +17,16 @@ object Database {
 
   private val database: mutable.Buffer[DatabaseItem] = mutable.Buffer.empty[DatabaseItem]
 
-  def insertData(data: String): Long = {
+  def insertData(data: String): Future[Long] = {
     val id = nextId
     database += DatabaseItem(id, data)
-    id
+    Future.successful(id)
   }
 
-  def insertDataList(data: List[String]): List[Long] = {
+  def insertDataList(data: Seq[String]): Future[Seq[Long]] = {
     val items = data.map(DatabaseItem(nextId, _))
     database ++= items
-    items.map(_.id)
+    Future.successful(items.map(_.id))
   }
 
 }
